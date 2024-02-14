@@ -10,7 +10,8 @@ namespace TicTacToe
     {
         static void Main()
         {
-
+            Game cross = new Game();
+            cross.Play();
         }
     }
 }
