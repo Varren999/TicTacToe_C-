@@ -3,22 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Log;
 
 namespace TicTacToe
 {
     internal class Game
     {
-        Random random = new Random();
-        int step = 0;
-        string[] msg = new string[] { "Победил игрок играющий крестиком!\n", "Победил игрок играющий ноликом!\n"};
-        char cross = 'X', zero = 'O';
-        char[] Endaged = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+        private readonly Random random = new Random(DateTime.Now.Millisecond);
+        private int step = 0;
+        private readonly string[] msg = new string[] { "Победил игрок играющий крестиком!\n", "Победил игрок играющий ноликом!\n"};
+        private readonly char cross = 'X', zero = 'O';
+        private char[] Endaged = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
         // 1 = 16, 2 = 20, 3 = 24, 4 = 44, 5 = 48, 6 = 52, 7 = 72, 8 = 76, 9 = 80
         string screen = "-------------\n|   |   |   |\n-------------\n|   |   |   |\n-------------\n|   |   |   |\n-------------\n";
 
-        // Проверяем занято поле.
-        bool Is_Endaged(int value, char cr)
+        /// <summary>
+        /// Метод проверяет свободные поля.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="cr"></param>
+        /// <returns></returns>
+        private bool Is_Endaged(int value, char cr)
         {
             if (Endaged[value] != cross && Endaged[value] != zero)
             {
@@ -29,21 +35,27 @@ namespace TicTacToe
                 return false;
         }
 
-        // Ничья
-        bool Is_Draw()
+        /// <summary>
+        /// Метод проверяет на ничью.
+        /// </summary>
+        /// <returns></returns>
+        private bool Is_Draw()
         {
             for (int i = 0; i < Endaged.Length; i++)
             {
                 if (Is_Endaged(i, Convert.ToChar(i + 49)))
                     return true;
             }
-            Console.WriteLine("Ничья\nДля выход нажмите любую кнопку");
+            Console.WriteLine("Ничья\nДля выход нажмите любую кнопку.");
             Console.ReadKey(true);
             return false;
         }
 
-        // Метод проверяет выигрышные ситуации.
-        bool Is_Winner()
+        /// <summary>
+        /// Метод проверяет выигрышные ситуации.
+        /// </summary>
+        /// <returns></returns>
+        private bool Is_Winner()
         {
             // 1 == 2 == 3
             if (Endaged[0] == Endaged[1] && Endaged[1] == Endaged[2])
@@ -111,26 +123,36 @@ namespace TicTacToe
             return true;
         }
 
-        // Ход компьютера
-        void ComLogic(char cr)
+        /// <summary>
+        /// Ход компьютера.
+        /// </summary>
+        /// <param name="cr"></param>
+        private void ComLogic(char cr)
         {
             bool cycle = true;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Ход компьютера");
             Console.WriteLine($"Вы играете {cr}\n");
+            Console.ForegroundColor = ConsoleColor.White;
             do
             {
                 if (Is_Endaged(random.Next(9), cr))
                     cycle = false;
             } while (cycle);
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1000);
         }
 
-        // Ход игрока
-        void Player(char cr)
+        /// <summary>
+        /// Ход игрока.
+        /// </summary>
+        /// <param name="cr"></param>
+        private void Player(char cr)
         {
             bool cycle = true;
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Ход игрока");
             Console.WriteLine($"Вы играете {cr}\n");
+            Console.ForegroundColor = ConsoleColor.White;
             try
             {
                 while (cycle)
@@ -153,14 +175,13 @@ namespace TicTacToe
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine("Для продолжения нажмите любую клавишу!");
-                Console.ReadKey();
-
+                Logger.Error(ex.TargetSite + ex.Message);
             }
         }
 
-        // Кто ходит?
+        /// <summary>
+        /// Метод переключает ходы.
+        /// </summary>
         private void Step()
         {
             if (step == 0)
@@ -176,7 +197,28 @@ namespace TicTacToe
             }
         }
 
-        // 
+        /// <summary>
+        /// Метод очищает игровое поле.
+        /// </summary>
+        private void Clear()
+        {
+            string empty = "                                                                    ";
+            Console.SetCursorPosition(0, 0);
+            try
+            {
+                for (int y = 0; y < 10; y++)
+                    Console.WriteLine(empty);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.TargetSite + ex.Message);
+            }
+            Console.SetCursorPosition(0, 0);
+        }
+
+        /// <summary>
+        /// Метод рисует игровую сцену.
+        /// </summary>
         void Screen()
         {
             for (int i = 0, m = 0, j = 16; i < 9; i++)
@@ -195,12 +237,16 @@ namespace TicTacToe
                     m = 0;
                 }
             }
-            Console.Clear();
+            Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Игра крестики - нолики\n");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(screen);
         }
 
-        //
+        /// <summary>
+        /// Метод 
+        /// </summary>
         public void Play()
         {
             step = random.Next(2);

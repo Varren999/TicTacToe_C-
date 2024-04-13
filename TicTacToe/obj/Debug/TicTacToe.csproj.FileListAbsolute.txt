@@ -12,3 +12,5 @@ C:\Users\varre\source\repos\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csproj.Assem
 C:\Users\varre\source\repos\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csproj.CoreCompileInputs.cache
 C:\Users\varre\source\repos\TicTacToe\TicTacToe\obj\Debug\TicTacToe.exe
 C:\Users\varre\source\repos\TicTacToe\TicTacToe\obj\Debug\TicTacToe.pdb
+C:\Users\varre\source\repos\TicTacToe\TicTacToe\bin\Debug\Logger.dll
+C:\Users\varre\source\repos\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csproj.Up2Date
